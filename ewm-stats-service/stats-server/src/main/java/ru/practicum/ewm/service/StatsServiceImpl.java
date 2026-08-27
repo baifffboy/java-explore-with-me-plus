@@ -25,12 +25,7 @@ public class StatsServiceImpl implements StatsService {
      * @param hitDto Данные о запросе.
      */
     @Override
-    @Transactional
     public void saveHit(EndpointHitRequestDto hitDto) {
-        if (hitDto == null) {
-            throw new ValidationException("Данные о запросе должны быть указаны");
-        }
-
         hitRepository.save(HitMapper.toHit(hitDto));
     }
 
