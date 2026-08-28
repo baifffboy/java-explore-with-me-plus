@@ -53,7 +53,8 @@ public class StatsClient {
                 url,
                 HttpMethod.GET,
                 null,
-                new ParameterizedTypeReference<List<ViewStats>>() {}
+                new ParameterizedTypeReference<List<ViewStats>>() {
+                }
         );
 
         return response.getBody() != null ? response.getBody() : Collections.emptyList();
