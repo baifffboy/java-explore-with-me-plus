@@ -1,19 +1,15 @@
 package ru.practicum.ewm.mapper;
 
+import org.mapstruct.Mapper;
+import org.mapstruct.NullValuePropertyMappingStrategy;
+import ru.practicum.ewm.EndpointHitDto;
 import ru.practicum.ewm.EndpointHitRequestDto;
 import ru.practicum.ewm.model.Hit;
 
-public final class HitMapper {
+@Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+public interface HitMapper {
 
-    private HitMapper() {
-    }
+    Hit toEntity(EndpointHitRequestDto requestDto);
 
-    public static Hit toHit(EndpointHitRequestDto hitDto) {
-        Hit hit = new Hit();
-        hit.setApp(hitDto.getApp());
-        hit.setUri(hitDto.getUri());
-        hit.setIp(hitDto.getIp());
-        hit.setTimestamp(hitDto.getTimestamp());
-        return hit;
-    }
+    EndpointHitDto toDto(Hit hit);
 }
