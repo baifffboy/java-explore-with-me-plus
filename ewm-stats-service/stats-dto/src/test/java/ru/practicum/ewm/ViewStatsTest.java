@@ -39,13 +39,11 @@ class ViewStatsTest {
 
     @Test
     void shouldDeserializeFromJson() throws Exception {
-        String json = """
-                {
-                    "app": "ewm-main-service",
-                    "uri": "/events/1",
-                    "hits": 10
-                }
-                """;
+        String json = "{" +
+                "    \"app\": \"ewm-main-service\"," +
+                "    \"uri\": \"/events/1\"," +
+                "    \"hits\": 10" +
+                "}";
 
         ViewStats dto = objectMapper.readValue(json, ViewStats.class);
 
