@@ -28,7 +28,7 @@ class HitMapperTest {
                 .timestamp(timestamp)
                 .build();
 
-        Hit hit = hitMapper.toHit(requestDto);
+        Hit hit = hitMapper.toEntity(requestDto);
 
         assertThat(hit).isNotNull();
         assertThat(hit.getId()).isNull();

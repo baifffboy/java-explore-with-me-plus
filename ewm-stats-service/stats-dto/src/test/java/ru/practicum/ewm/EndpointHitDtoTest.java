@@ -55,13 +55,15 @@ class EndpointHitDtoTest {
 
     @Test
     void shouldDeserializeFromJson() throws Exception {
-        String json = "{" +
-                "    \"id\": 1," +
-                "    \"app\": \"ewm-main-service\"," +
-                "    \"uri\": \"/events/1\"," +
-                "    \"ip\": \"192.168.0.1\"," +
-                "    \"timestamp\": \"2024-01-01 12:00:00\"" +
-                "}";
+        String json = """
+                {
+                    "id": 1,
+                    "app": "ewm-main-service",
+                    "uri": "/events/1",
+                    "ip": "192.168.0.1",
+                    "timestamp": "2024-01-01 12:00:00"
+                }
+                """;
 
         EndpointHitDto dto = objectMapper.readValue(json, EndpointHitDto.class);
 

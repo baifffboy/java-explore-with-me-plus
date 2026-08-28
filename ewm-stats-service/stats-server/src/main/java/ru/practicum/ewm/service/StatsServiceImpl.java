@@ -18,7 +18,6 @@ import java.util.List;
 public class StatsServiceImpl implements StatsService {
 
     private final HitRepository hitRepository;
-    private final HitMapper hitMapper;
 
     /**
      * Сохранение информации о запросе.
@@ -27,7 +26,7 @@ public class StatsServiceImpl implements StatsService {
      */
     @Override
     public void saveHit(EndpointHitRequestDto hitDto) {
-        hitRepository.save(hitMapper.toHit(hitDto));
+        hitRepository.save(HitMapper.toHit(hitDto));
     }
 
     /**
