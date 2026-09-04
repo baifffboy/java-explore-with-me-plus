@@ -1,0 +1,26 @@
+package ru.practicum.ewm.repository;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.repository.EntityGraph;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.lang.Nullable;
+import ru.practicum.ewm.model.Event;
+
+import java.util.List;
+import java.util.Optional;
+
+public interface EventRepository extends JpaRepository<Event, Long>, JpaSpecificationExecutor<Event> {
+    @Override
+    @EntityGraph(attributePaths = {"initiator", "category"})
+    Optional<Event> findById(Long id);
+
+    @EntityGraph(attributePaths = {"initiator", "category"})
+    List<Event> findAllByInitiatorIdOrderByIdAsc(Long initiatorId, Pageable pageable);
+
+    @Override
+    @EntityGraph(attributePaths = {"initiator", "category"})
+    Page<Event> findAll(@Nullable Specification<Event> spec, Pageable pageable);
+}
