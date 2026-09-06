@@ -35,4 +35,16 @@ public class ErrorHandler {
                 LocalDateTime.now()
         );
     }
+
+    @ExceptionHandler(NotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handleNotFound(NotFoundException exception) {
+        log.warn("Данные не найдены или недоступны: {}", exception.getMessage());
+        return new ErrorResponse(
+                "NOT_FOUND",
+                "The required object was not found.",
+                exception.getMessage(),
+                LocalDateTime.now()
+        );
+    }
 }
