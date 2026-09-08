@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 
 @Slf4j
 @RestControllerAdvice
@@ -14,37 +15,40 @@ public class ErrorHandler {
 
     @ExceptionHandler(ValidationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleValidation(ValidationException exception) {
+    public ApiError handleValidation(ValidationException exception) {
         log.warn("Ошибка валидации: {}", exception.getMessage());
-        return new ErrorResponse(
-                "BAD_REQUEST",
-                "Incorrectly made request.",
-                exception.getMessage(),
-                LocalDateTime.now()
-        );
+        return ApiError.builder()
+                .errors(Collections.emptyList())
+                .status(HttpStatus.BAD_REQUEST.name())
+                .reason("Incorrectly made request.")
+                .message(exception.getMessage())
+                .timestamp(LocalDateTime.now())
+                .build();
     }
 
     @ExceptionHandler(ConflictException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorResponse handleConflict(ConflictException exception) {
+    public ApiError handleConflict(ConflictException exception) {
         log.warn("Ошибка целостности данных: {}", exception.getMessage());
-        return new ErrorResponse(
-                "CONFLICT",
-                "Integrity constraint has been violated.",
-                exception.getMessage(),
-                LocalDateTime.now()
-        );
+        return ApiError.builder()
+                .errors(Collections.emptyList())
+                .status(HttpStatus.CONFLICT.name())
+                .reason("Integrity constraint has been violated.")
+                .message(exception.getMessage())
+                .timestamp(LocalDateTime.now())
+                .build();
     }
 
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse handleNotFound(NotFoundException exception) {
+    public ApiError handleNotFound(NotFoundException exception) {
         log.warn("Данные не найдены или недоступны: {}", exception.getMessage());
-        return new ErrorResponse(
-                "NOT_FOUND",
-                "The required object was not found.",
-                exception.getMessage(),
-                LocalDateTime.now()
-        );
+        return ApiError.builder()
+                .errors(Collections.emptyList())
+                .status(HttpStatus.NOT_FOUND.name())
+                .reason("The required object was not found.")
+                .message(exception.getMessage())
+                .timestamp(LocalDateTime.now())
+                .build();
     }
 }
