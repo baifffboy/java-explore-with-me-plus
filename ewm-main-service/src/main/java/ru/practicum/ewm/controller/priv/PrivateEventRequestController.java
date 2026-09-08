@@ -1,4 +1,4 @@
-package ru.practicum.ewm.controller.privat;
+package ru.practicum.ewm.controller.priv;
 
 
 import jakarta.validation.Valid;

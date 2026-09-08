@@ -23,4 +23,6 @@ public interface EventRepository extends JpaRepository<Event, Long>, JpaSpecific
     @Override
     @EntityGraph(attributePaths = {"initiator", "category"})
     Page<Event> findAll(@Nullable Specification<Event> spec, Pageable pageable);
+
+    boolean existsByCategoryId(Long categoryId);
 }
