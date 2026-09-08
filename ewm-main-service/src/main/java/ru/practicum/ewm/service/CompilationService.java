@@ -13,7 +13,7 @@ public interface CompilationService {
 
     CompilationDto create(@Valid NewCompilationDto newCompilationDto);
 
-    Void delete(Long compId);
+    void delete(Long compId);
 
     CompilationDto update(Long compId, @Valid UpdateCompilationRequest updateRequest);
 
