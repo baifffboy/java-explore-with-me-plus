@@ -51,6 +51,7 @@ services:
       - SPRING_DATASOURCE_USERNAME=${EWM_DB_USERNAME}
       - SPRING_DATASOURCE_PASSWORD=${EWM_DB_PASSWORD}
       - STATS_SERVER_URL=${STATS_SERVER_URL}
+      - JAVA_OPTS=-Xmx512m
 
   ewm-db:
     image: postgres:16.1
