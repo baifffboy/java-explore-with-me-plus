@@ -106,9 +106,8 @@ public class EventServiceImpl implements EventService {
             throw new ConflictException("Изменить можно только отменённое событие или событие в ожидании модерации");
         }
         validateEventDate(request.getEventDate(), 2);
-        applyUpdate(event, request.getAnnotation(), request.getCategory(), request.getDescription(),
-                request.getEventDate(), request.getLocation(), request.getPaid(), request.getParticipantLimit(),
-                request.getRequestModeration(), request.getTitle());
+        eventMapper.updateFromUserRequest(request, event);
+        updateCategory(event, request.getCategory());
         if (request.getStateAction() == UserEventStateAction.SEND_TO_REVIEW) {
             event.setState(EventState.PENDING);
         } else if (request.getStateAction() == UserEventStateAction.CANCEL_REVIEW) {
@@ -139,21 +138,17 @@ public class EventServiceImpl implements EventService {
         }
     }
 
-    private void applyUpdate(Event event, String annotation, Long categoryId, String description,
-                             LocalDateTime eventDate, ru.practicum.ewm.model.Location location,
-                             Boolean paid, Integer participantLimit, Boolean requestModeration, String title) {
-        if (annotation != null) event.setAnnotation(annotation);
-        if (categoryId != null) {
-            event.setCategory(categoryRepository.findById(categoryId)
-                    .orElseThrow(() -> new NotFoundException("Категория с id=" + categoryId + " не найдена")));
+    private void updateCategory(Event event, Long categoryId) {
+        if (categoryId == null) {
+            return;
         }
-        if (description != null) event.setDescription(description);
-        if (eventDate != null) event.setEventDate(eventDate);
-        if (location != null) event.setLocation(eventMapper.copyLocation(location));
-        if (paid != null) event.setPaid(paid);
-        if (participantLimit != null) event.setParticipantLimit(participantLimit);
-        if (requestModeration != null) event.setRequestModeration(requestModeration);
-        if (title != null) event.setTitle(title);
+
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new NotFoundException(
+                        "Категория с id=" + categoryId + " не найдена"
+                ));
+
+        event.setCategory(category);
     }
 
     private Map<Long, Long> confirmedCounts(List<Event> events) {
@@ -200,9 +195,8 @@ public class EventServiceImpl implements EventService {
             }
             event.setState(EventState.CANCELED);
         }
-        applyUpdate(event, request.getAnnotation(), request.getCategory(), request.getDescription(),
-                request.getEventDate(), request.getLocation(), request.getPaid(), request.getParticipantLimit(),
-                request.getRequestModeration(), request.getTitle());
+        eventMapper.updateFromAdminRequest(request, event);
+        updateCategory(event, request.getCategory());
         long confirmed = requestRepository.countByEventIdAndStatus(eventId, RequestStatus.CONFIRMED);
         long views = views(List.of(event)).getOrDefault(eventUri(eventId), 0L);
         return eventMapper.toFullDto(event, confirmed, views);

@@ -183,7 +183,7 @@ class EventServiceImplTest {
         EventFullDto result = eventService.updateUserEvent(1L, 10L, request);
 
         assertSame(expected, result);
-        assertEquals("Обновлённое событие", event.getTitle());
+        verify(eventMapper).updateFromUserRequest(request, event);
         assertEquals(EventState.CANCELED, event.getState());
     }
 
@@ -204,6 +204,7 @@ class EventServiceImplTest {
         assertSame(expected, result);
         assertEquals(EventState.PUBLISHED, event.getState());
         assertNotNull(event.getPublishedOn());
+        verify(eventMapper).updateFromAdminRequest(request, event);
     }
 
     @Test
