@@ -6,7 +6,7 @@ services:
       context: ewm-stats-service
       dockerfile: Dockerfile
     container_name: ewm-stats-service
-    restart: always
+    restart: on-failure
     ports:
       - "${STATS_SERVER_HOST_PORT}:${STATS_SERVER_CONTAINER_PORT}"
     depends_on:
@@ -38,7 +38,7 @@ services:
       context: ewm-main-service
       dockerfile: Dockerfile
     container_name: ewm-main-service
-    restart: always
+    restart: on-failure
     ports:
       - "${EWM_SERVICE_HOST_PORT}:${EWM_SERVICE_CONTAINER_PORT}"
     depends_on:
@@ -51,8 +51,6 @@ services:
       - SPRING_DATASOURCE_USERNAME=${EWM_DB_USERNAME}
       - SPRING_DATASOURCE_PASSWORD=${EWM_DB_PASSWORD}
       - STATS_SERVER_URL=${STATS_SERVER_URL}
-      - JAVA_OPTS=-Xmx512m
-    entrypoint: ["sh", "-c", "java ${JAVA_OPTS} -jar /app.jar"]
 
   ewm-db:
     image: postgres:16.1
