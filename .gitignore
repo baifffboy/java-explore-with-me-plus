@@ -22,4 +22,4 @@ target/
 *.ipr
 
 ### сделанный сервис статистики не трогаем
-ewm-stats-service/
+#ewm-stats-service/
