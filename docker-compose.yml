@@ -6,7 +6,7 @@ services:
       context: ewm-stats-service
       dockerfile: Dockerfile
     container_name: ewm-stats-service
-    restart: on-failure
+    restart: always
     ports:
       - "${STATS_SERVER_HOST_PORT}:${STATS_SERVER_CONTAINER_PORT}"
     depends_on:
@@ -38,7 +38,7 @@ services:
       context: ewm-main-service
       dockerfile: Dockerfile
     container_name: ewm-main-service
-    restart: on-failure
+    restart: always
     ports:
       - "${EWM_SERVICE_HOST_PORT}:${EWM_SERVICE_CONTAINER_PORT}"
     depends_on:
