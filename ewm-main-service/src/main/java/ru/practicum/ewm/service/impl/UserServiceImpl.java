@@ -32,8 +32,9 @@ public class UserServiceImpl implements UserService {
     public UserDto registerUser(NewUserRequest newUserRequest) {
         log.info("Регистрация пользователя: {}", newUserRequest);
 
-        userRepository.findByEmail(newUserRequest.getEmail())
-                .orElseThrow(() -> new ConflictException("Email already exists"));
+        if (userRepository.existsByEmail(newUserRequest.getEmail())) {
+            throw new ConflictException("Пользователь с таким адресом электронной почты уже существует");
+        }
 
         User user = userMapper.toUser(newUserRequest);
         User saved = userRepository.save(user);

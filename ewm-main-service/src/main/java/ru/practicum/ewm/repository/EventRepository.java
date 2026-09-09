@@ -2,6 +2,7 @@ package ru.practicum.ewm.repository;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -23,6 +24,10 @@ public interface EventRepository extends JpaRepository<Event, Long>, JpaSpecific
     @Override
     @EntityGraph(attributePaths = {"initiator", "category"})
     Page<Event> findAll(@Nullable Specification<Event> spec, Pageable pageable);
+
+    @Override
+    @EntityGraph(attributePaths = {"initiator", "category"})
+    List<Event> findAll(@Nullable Specification<Event> spec, Sort sort);
 
     boolean existsByCategoryId(Long categoryId);
 }

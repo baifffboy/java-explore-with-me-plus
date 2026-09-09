@@ -27,9 +27,6 @@ public class CompilationServiceImpl implements CompilationService {
 
     private final CompilationMapper compilationMapper;
     private final CompilationRepository compilationRepository;
-    private final ru.practicum.ewm.client.StatsClient statsClient;
-
-    private static final String APP_NAME = "ewm-main-service";
 
     @Override
     @Transactional
