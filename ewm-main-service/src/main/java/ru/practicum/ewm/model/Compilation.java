@@ -7,7 +7,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "compilations")
+@Table(name = "compilations", indexes = {
+        @Index(name = "idx_compilations_events_compilation_id", columnList = "compilation_id"),
+        @Index(name = "idx_compilations_events_event_id", columnList = "event_id")
+})
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -31,6 +34,6 @@ public class Compilation {
     @Column(nullable = false)
     private Boolean pinned;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 256)
     private String title;
 }
