@@ -1,16 +1,17 @@
 package ru.practicum.ewm.controller;
 
+import jakarta.validation.Validation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.MediaType;
 import org.springframework.aop.framework.ProxyFactory;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.validation.beanvalidation.MethodValidationInterceptor;
-import jakarta.validation.Validation;
+import ru.practicum.ewm.EndpointHitRequestDto;
 import ru.practicum.ewm.client.StatsClient;
 import ru.practicum.ewm.controller.admin.AdminEventController;
 import ru.practicum.ewm.controller.priv.PrivateEventController;
@@ -19,14 +20,13 @@ import ru.practicum.ewm.exception.ErrorHandler;
 import ru.practicum.ewm.exception.NotFoundException;
 import ru.practicum.ewm.service.EventService;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.mockito.ArgumentMatchers.any;
-import ru.practicum.ewm.EndpointHitRequestDto;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
 class EventControllerTest {
