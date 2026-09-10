@@ -36,7 +36,6 @@ public class NewEventDto {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime eventDate;
 
-    //
     //Широта и долгота места проведения события
     @Valid
     @NotNull
