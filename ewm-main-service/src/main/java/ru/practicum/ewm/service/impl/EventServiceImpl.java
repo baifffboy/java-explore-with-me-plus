@@ -2,39 +2,28 @@ package ru.practicum.ewm.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import ru.practicum.ewm.dto.event.EventFullDto;
-import ru.practicum.ewm.dto.event.NewEventDto;
-import ru.practicum.ewm.dto.event.EventShortDto;
-import ru.practicum.ewm.dto.event.UpdateEventUserRequest;
-import ru.practicum.ewm.dto.event.UserEventStateAction;
-import ru.practicum.ewm.dto.event.UpdateEventAdminRequest;
-import ru.practicum.ewm.dto.event.AdminEventStateAction;
-import ru.practicum.ewm.dto.event.EventSort;
+import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.ewm.ViewStats;
+import ru.practicum.ewm.client.StatsClient;
+import ru.practicum.ewm.dto.event.*;
 import ru.practicum.ewm.exception.ConflictException;
 import ru.practicum.ewm.exception.NotFoundException;
 import ru.practicum.ewm.mapper.EventMapper;
-import ru.practicum.ewm.model.Category;
-import ru.practicum.ewm.model.Event;
-import ru.practicum.ewm.model.EventState;
-import ru.practicum.ewm.model.User;
+import ru.practicum.ewm.model.*;
 import ru.practicum.ewm.repository.CategoryRepository;
 import ru.practicum.ewm.repository.EventRepository;
-import ru.practicum.ewm.repository.UserRepository;
 import ru.practicum.ewm.repository.RequestRepository;
-import ru.practicum.ewm.model.RequestStatus;
+import ru.practicum.ewm.repository.UserRepository;
 import ru.practicum.ewm.service.EventService;
-import ru.practicum.ewm.client.StatsClient;
-import ru.practicum.ewm.ViewStats;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
 
 @Service
 @Slf4j
@@ -254,7 +243,8 @@ public class EventServiceImpl implements EventService {
             List<jakarta.persistence.criteria.Predicate> predicates = new java.util.ArrayList<>();
             if (users != null && !users.isEmpty()) predicates.add(root.get("initiator").get("id").in(users));
             if (states != null && !states.isEmpty()) predicates.add(root.get("state").in(states));
-            if (categories != null && !categories.isEmpty()) predicates.add(root.get("category").get("id").in(categories));
+            if (categories != null && !categories.isEmpty())
+                predicates.add(root.get("category").get("id").in(categories));
             if (paid != null) predicates.add(builder.equal(root.get("paid"), paid));
             if (text != null && !text.isBlank()) {
                 String pattern = "%" + text.toLowerCase() + "%";
