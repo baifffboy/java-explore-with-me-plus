@@ -2,6 +2,7 @@ package ru.practicum.ewm.dto.event;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -34,6 +35,7 @@ public class NewEventDto {
     // Дата и время на которые намечено событие. Дата и время должны быть в формате "yyyy-MM-dd HH:mm:ss"
     @NotNull
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Future(message = "Дата события должна быть в будущем")
     private LocalDateTime eventDate;
 
     //Широта и долгота места проведения события
