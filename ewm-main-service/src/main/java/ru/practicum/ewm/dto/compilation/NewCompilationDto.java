@@ -1,10 +1,11 @@
 package ru.practicum.ewm.dto.compilation;
 
+import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Data;
-import ru.practicum.ewm.model.Event;
 
 import java.util.Set;
 
@@ -12,9 +13,10 @@ import java.util.Set;
 @Builder
 public class NewCompilationDto {
 
-    private Set<Event> events;
+    private Set<Long> events;
 
     @Builder.Default
+    @JsonSetter(nulls = Nulls.SKIP)
     private Boolean pinned = false;
 
     @NotBlank

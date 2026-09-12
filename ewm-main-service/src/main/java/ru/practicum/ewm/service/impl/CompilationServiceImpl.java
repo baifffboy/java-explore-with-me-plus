@@ -13,10 +13,14 @@ import ru.practicum.ewm.exception.ConflictException;
 import ru.practicum.ewm.exception.NotFoundException;
 import ru.practicum.ewm.mapper.CompilationMapper;
 import ru.practicum.ewm.model.Compilation;
+import ru.practicum.ewm.model.Event;
 import ru.practicum.ewm.repository.CompilationRepository;
+import ru.practicum.ewm.repository.EventRepository;
 import ru.practicum.ewm.service.CompilationService;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -27,6 +31,7 @@ public class CompilationServiceImpl implements CompilationService {
 
     private final CompilationMapper compilationMapper;
     private final CompilationRepository compilationRepository;
+    private final EventRepository eventRepository;
 
     @Override
     @Transactional
@@ -36,6 +41,15 @@ public class CompilationServiceImpl implements CompilationService {
             throw new ConflictException(String.format("Подборка с названием %s уже существует", newCompilationDto.getTitle()));
         }
         Compilation compilation = compilationMapper.toCompilation(newCompilationDto);
+        Set<Event> eventEntities = new HashSet<>();
+        if (newCompilationDto.getEvents() != null) {
+            for (Long eventId : newCompilationDto.getEvents()) {
+                Event event = eventRepository.findById(eventId)
+                        .orElseThrow(() -> new NotFoundException("Event with id " + eventId + " was not found"));
+                eventEntities.add(event);
+            }
+        }
+        compilation.setEvents(eventEntities);
         Compilation saved = compilationRepository.save(compilation);
         log.info("Подборка создана с id={}", saved.getId());
         return compilationMapper.toDto(saved);
@@ -64,6 +78,15 @@ public class CompilationServiceImpl implements CompilationService {
             throw new ConflictException(String.format("Подборка с названием %s уже существует", updateRequest.getTitle()));
         }
         compilationMapper.updateCompilation(compilation, updateRequest);
+        if (updateRequest.getEvents() != null) {
+            Set<Event> eventEntities = new HashSet<>();
+            for (Long eventId : updateRequest.getEvents()) {
+                Event event = eventRepository.findById(eventId)
+                        .orElseThrow(() -> new NotFoundException("Event with id " + eventId + " was not found"));
+                eventEntities.add(event);
+            }
+            compilation.setEvents(eventEntities);
+        }
         Compilation updated = compilationRepository.save(compilation);
         log.info("Обновлена подборка с названием {}", updated.getTitle());
         return compilationMapper.toDto(updated);
