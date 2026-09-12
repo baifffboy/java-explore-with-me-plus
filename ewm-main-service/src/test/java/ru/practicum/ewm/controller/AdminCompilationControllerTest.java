@@ -68,7 +68,6 @@ class AdminCompilationControllerTest {
     @Test
     void shouldUpdateCompilation() throws Exception {
         UpdateCompilationRequest request = new UpdateCompilationRequest();
-        request.setId(1L);
         request.setTitle("Updated Compilation");
 
         CompilationDto resultDto = new CompilationDto();

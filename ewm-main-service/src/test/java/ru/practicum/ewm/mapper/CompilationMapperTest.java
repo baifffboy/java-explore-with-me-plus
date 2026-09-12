@@ -55,7 +55,6 @@ class CompilationMapperTest {
         compilation.setPinned(false);
 
         UpdateCompilationRequest request = new UpdateCompilationRequest();
-        request.setId(1L);
         request.setTitle("New Title");
         request.setPinned(true);
 
@@ -73,7 +72,6 @@ class CompilationMapperTest {
         compilation.setTitle("Old Title");
 
         UpdateCompilationRequest request = new UpdateCompilationRequest();
-        request.setId(1L);
 
         mapper.updateCompilation(compilation, request);
 

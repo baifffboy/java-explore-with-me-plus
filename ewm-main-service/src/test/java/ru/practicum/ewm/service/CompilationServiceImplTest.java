@@ -111,7 +111,6 @@ class CompilationServiceImplTest {
     @Test
     void shouldUpdateCompilation() {
         UpdateCompilationRequest request = new UpdateCompilationRequest();
-        request.setId(1L);
         request.setTitle("Updated Compilation");
         request.setPinned(false);
 

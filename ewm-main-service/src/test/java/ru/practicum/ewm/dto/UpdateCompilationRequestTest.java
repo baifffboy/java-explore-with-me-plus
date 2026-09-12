@@ -23,21 +23,10 @@ class UpdateCompilationRequestTest {
     @Test
     void shouldValidateValidUpdateCompilationRequest() {
         UpdateCompilationRequest dto = new UpdateCompilationRequest();
-        dto.setId(1L);
         dto.setTitle("Updated Compilation");
         dto.setPinned(true);
 
         Set<ConstraintViolation<UpdateCompilationRequest>> violations = validator.validate(dto);
         assertThat(violations).isEmpty();
-    }
-
-    @Test
-    void shouldFailWhenIdIsNull() {
-        UpdateCompilationRequest dto = new UpdateCompilationRequest();
-        dto.setTitle("Test");
-
-        Set<ConstraintViolation<UpdateCompilationRequest>> violations = validator.validate(dto);
-        assertThat(violations).isNotEmpty();
-        assertThat(violations).anyMatch(v -> v.getPropertyPath().toString().equals("id"));
     }
 }
