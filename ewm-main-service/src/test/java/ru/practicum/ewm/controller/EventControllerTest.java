@@ -22,9 +22,11 @@ import ru.practicum.ewm.service.EventService;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -85,6 +87,44 @@ class EventControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
                 .andExpect(jsonPath("$.reason").value("Некорректный запрос."));
+    }
+
+    @Test
+    void createEventWithPastDateShouldReturnBadRequest() throws Exception {
+        mockMvc.perform(post("/users/1/events")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"annotation\":\"Достаточно длинная аннотация события\","
+                                + "\"category\":1,"
+                                + "\"description\":\"Достаточно длинное описание события\","
+                                + "\"eventDate\":\"2020-12-31 15:10:05\","
+                                + "\"location\":{\"lat\":55.75,\"lon\":37.62},"
+                                + "\"title\":\"Новое событие\"}"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status").value("BAD_REQUEST"));
+
+        verifyNoInteractions(eventService);
+    }
+
+    @Test
+    void userUpdateWithPastDateShouldReturnBadRequest() throws Exception {
+        mockMvc.perform(patch("/users/1/events/10")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"eventDate\":\"2020-10-11 23:10:05\"}"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status").value("BAD_REQUEST"));
+
+        verifyNoInteractions(eventService);
+    }
+
+    @Test
+    void adminUpdateWithPastDateShouldReturnBadRequest() throws Exception {
+        mockMvc.perform(patch("/admin/events/10")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"eventDate\":\"2020-10-11 23:10:05\"}"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status").value("BAD_REQUEST"));
+
+        verifyNoInteractions(eventService);
     }
 
     @Test
