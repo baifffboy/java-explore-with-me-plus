@@ -41,13 +41,12 @@ public class CompilationServiceImpl implements CompilationService {
             throw new ConflictException(String.format("Подборка с названием %s уже существует", newCompilationDto.getTitle()));
         }
         Compilation compilation = compilationMapper.toCompilation(newCompilationDto);
+        if (compilation.getPinned() == null) {
+            compilation.setPinned(false);
+        }
         Set<Event> eventEntities = new HashSet<>();
         if (newCompilationDto.getEvents() != null) {
-            for (Long eventId : newCompilationDto.getEvents()) {
-                Event event = eventRepository.findById(eventId)
-                        .orElseThrow(() -> new NotFoundException("Event with id " + eventId + " was not found"));
-                eventEntities.add(event);
-            }
+            eventEntities.addAll(eventRepository.findAllById(newCompilationDto.getEvents()));
         }
         compilation.setEvents(eventEntities);
         Compilation saved = compilationRepository.save(compilation);

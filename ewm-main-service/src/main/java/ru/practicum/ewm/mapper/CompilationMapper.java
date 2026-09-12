@@ -11,16 +11,17 @@ import ru.practicum.ewm.model.Compilation;
 
 @Mapper(
         componentModel = "spring",
-        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE
+        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
+        uses = EventMapper.class
 )
 public interface CompilationMapper {
 
-    @Mapping(target = "events",
-            expression = "java(compilation.getEvents().stream().map(ru.practicum.ewm.model.Event::getId).collect(java.util.stream.Collectors.toList()))")
+    @Mapping(target = "events", source = "events")
     CompilationDto toDto(Compilation compilation);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "events", ignore = true)
+    @Mapping(target = "pinned", defaultValue = "false")
     Compilation toCompilation(NewCompilationDto newCompilationDto);
 
     @Mapping(target = "id", ignore = true)
