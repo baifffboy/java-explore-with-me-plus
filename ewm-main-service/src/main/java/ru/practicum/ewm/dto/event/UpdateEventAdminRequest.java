@@ -1,6 +1,7 @@
 package ru.practicum.ewm.dto.event;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -37,14 +38,16 @@ public class UpdateEventAdminRequest {
     private Location location;
 
     // Нужно ли оплачивать участие в событии
-    private Boolean paid;
+    @JsonProperty("paid")
+    private Boolean isPaid;
 
     // Ограничение на количество участников. Значение 0 - означает отсутствие ограничения
     @PositiveOrZero
     private Integer participantLimit;
 
     // Нужно ли пре-модерировать заявки на участие. true - если нужно, false - если не нужно
-    private Boolean requestModeration;
+    @JsonProperty("requestModeration") // Указываем имя поля в JSON для POSTMAN-тестов
+    private Boolean isRequestModeration;
 
     // Состояние события. Возможные значения: PUBLISHED, CANCELED
     private AdminEventStateAction stateAction;

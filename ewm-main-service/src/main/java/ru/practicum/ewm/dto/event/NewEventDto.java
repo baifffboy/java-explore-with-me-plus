@@ -1,6 +1,7 @@
 package ru.practicum.ewm.dto.event;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
@@ -40,14 +41,16 @@ public class NewEventDto {
     private Location location;
 
     // Нужно ли оплачивать участие в событии
-    private boolean paid;
+    @JsonProperty("paid")
+    private boolean isPaid;
 
     // Ограничение на количество участников. Значение 0 - означает отсутствие ограничения
     @PositiveOrZero
     private int participantLimit;
 
     // Нужно ли пре-модерировать заявки на участие. true - если нужно, false - если не нужно
-    private boolean requestModeration = true;
+    @JsonProperty("requestModeration")
+    private boolean isRequestModeration = true;
 
     // Заголовок события. Длина заголовка не менее 3 и не более 120 символов.
     @NotBlank

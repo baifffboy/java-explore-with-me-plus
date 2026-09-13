@@ -1,6 +1,7 @@
 package ru.practicum.ewm.dto.event;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,7 +25,8 @@ public class EventFullDto {
     private LocalDateTime eventDate;
 
     private UserShortDto initiator;
-    private boolean paid;
+    @JsonProperty("paid")
+    private boolean isPaid;
     private String title;
     private long views;
 
@@ -38,6 +40,7 @@ public class EventFullDto {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime publishedOn;
 
-    private boolean requestModeration = true;
+    @JsonProperty("requestModeration")
+    private boolean isRequestModeration = true;
     private EventState state;
 }

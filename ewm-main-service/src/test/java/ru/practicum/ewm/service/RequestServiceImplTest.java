@@ -51,7 +51,7 @@ public class RequestServiceImplTest {
                 .initiator(initiator)
                 .state(EventState.PUBLISHED)
                 .participantLimit(10)
-                .requestModeration(true)
+                .isRequestModeration(true)
                 .build();
     }
 

@@ -20,9 +20,9 @@ public interface EventService {
 
     EventFullDto updateAdminEvent(Long eventId, UpdateEventAdminRequest request);
 
-    List<EventShortDto> getPublicEvents(String text, List<Long> categories, Boolean paid,
+    List<EventShortDto> getPublicEvents(String text, List<Long> categories, Boolean isPaid,
                                         java.time.LocalDateTime rangeStart, java.time.LocalDateTime rangeEnd,
-                                        boolean onlyAvailable, EventSort sort, int from, int size);
+                                        boolean isOnlyAvailable, EventSort sort, int from, int size);
 
     EventFullDto getPublicEvent(Long eventId);
 }
