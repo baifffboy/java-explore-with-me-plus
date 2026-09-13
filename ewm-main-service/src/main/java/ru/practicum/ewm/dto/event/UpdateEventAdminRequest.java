@@ -44,7 +44,7 @@ public class UpdateEventAdminRequest {
     private Integer participantLimit;
 
     // Нужно ли пре-модерировать заявки на участие. true - если нужно, false - если не нужно
-    private Boolean requestModeration;
+    private Boolean isRequestModeration;
 
     // Состояние события. Возможные значения: PUBLISHED, CANCELED
     private AdminEventStateAction stateAction;
