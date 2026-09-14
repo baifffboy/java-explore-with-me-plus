@@ -31,7 +31,7 @@ public class Compilation {
     @Builder.Default
     private Set<Event> events = new HashSet<>();
 
-    @Column(nullable = false)
+    @Column(name = "is_pinned", nullable = false)
     private Boolean isPinned = false;
 
     @Column(nullable = false, length = 256)
