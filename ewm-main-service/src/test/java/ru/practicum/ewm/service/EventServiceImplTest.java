@@ -1,8 +1,8 @@
 package ru.practicum.ewm.service;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Sort;
@@ -47,8 +47,20 @@ class EventServiceImplTest {
     private EventMapper eventMapper;
     @Mock
     private StatsClient statsClient;
-    @InjectMocks
     private EventServiceImpl eventService;
+
+    @BeforeEach
+    void setUp() {
+        eventService = new EventServiceImpl(
+                eventRepository,
+                userRepository,
+                categoryRepository,
+                eventMapper,
+                requestRepository,
+                statsClient,
+                2 // Дефолтное значение для тестов
+        );
+    }
 
     @Test
     void getUserEventShouldFailWhenEventDoesNotExist() {
@@ -83,7 +95,6 @@ class EventServiceImplTest {
         event.setId(10L);
         event.setInitiator(user);
         ViewStats stats = ViewStats.builder().uri("/events/10").hits(7L).build();
-        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         when(eventRepository.findById(10L)).thenReturn(Optional.of(event));
         when(statsClient.getStats(org.mockito.ArgumentMatchers.any(), org.mockito.ArgumentMatchers.any(),
                 eq(List.of("/events/10")), eq(true))).thenReturn(List.of(stats));
@@ -109,7 +120,6 @@ class EventServiceImplTest {
         event.setId(10L);
         event.setInitiator(user);
         event.setState(EventState.PUBLISHED);
-        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         when(eventRepository.findById(10L)).thenReturn(Optional.of(event));
 
         assertThrows(ConflictException.class,
@@ -168,7 +178,6 @@ class EventServiceImplTest {
         request.setTitle("Обновлённое событие");
         request.setStateAction(ru.practicum.ewm.dto.event.UserEventStateAction.CANCEL_REVIEW);
         EventFullDto expected = new EventFullDto();
-        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         when(eventRepository.findById(10L)).thenReturn(Optional.of(event));
         when(eventMapper.toFullDto(event, 0L, 0L)).thenReturn(expected);
 
@@ -244,6 +253,16 @@ class EventServiceImplTest {
                 null, null, false, EventSort.VIEWS, 0, 10);
 
         assertEquals(List.of(secondDto, firstDto), result);
+    }
+
+    @Test
+    void getUserEventsShouldFailWhenUserDoesNotExist() {
+        when(userRepository.existsById(1L)).thenReturn(false);
+
+        assertThrows(NotFoundException.class,
+                () -> eventService.getUserEvents(1L, 0, 10));
+
+        verify(userRepository).existsById(1L);
     }
 
     private Event event(Long id, int participantLimit) {

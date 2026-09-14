@@ -47,7 +47,7 @@ public class RequestServiceImpl implements RequestService {
         if (requestRepository.existsByRequesterIdAndEventId(userId, eventId)) {
             throw new ConflictException("Нельзя добавить повторный запрос от пользователя id=" + userId + " на событие id=" + eventId);
         }
-        if (event.getInitiator().getId().equals(userId)) {
+        if (event.getInitiator() != null && event.getInitiator().getId().equals(userId)) {
             throw new ConflictException("Инициатор события не может добавить запрос на участие в своём событии");
         }
         if (event.getState() != EventState.PUBLISHED) {

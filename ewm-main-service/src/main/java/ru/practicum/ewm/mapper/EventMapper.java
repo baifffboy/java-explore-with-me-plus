@@ -14,6 +14,8 @@ public interface EventMapper {
     @Mapping(target = "createdOn", ignore = true)
     @Mapping(target = "publishedOn", ignore = true)
     @Mapping(target = "state", ignore = true)
+    @Mapping(target = "isPaid", source = "paid")
+    @Mapping(target = "isRequestModeration", source = "requestModeration")
     Event toEvent(NewEventDto dto);
 
     EventShortDto toShortDto(
@@ -43,6 +45,8 @@ public interface EventMapper {
             source = "location",
             qualifiedByName = "copyLocation"
     )
+    @Mapping(target = "paid", source = "isPaid")
+    @Mapping(target = "requestModeration", source = "isRequestModeration")
     void updateFromUserRequest(
             UpdateEventUserRequest request,
             @MappingTarget Event event
@@ -63,6 +67,8 @@ public interface EventMapper {
             source = "location",
             qualifiedByName = "copyLocation"
     )
+    @Mapping(target = "requestModeration", source = "isRequestModeration")
+    @Mapping(target = "paid", source = "isPaid")
     void updateFromAdminRequest(
             UpdateEventAdminRequest request,
             @MappingTarget Event event

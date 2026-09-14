@@ -48,8 +48,8 @@ public class Event {
     })
     private Location location;
 
-    @Column(nullable = false)
-    private boolean paid;
+    @Column(name = "paid", nullable = false)
+    private boolean isPaid;
 
     @Column(name = "participant_limit", nullable = false)
     private int participantLimit;
@@ -58,7 +58,7 @@ public class Event {
     private LocalDateTime publishedOn;
 
     @Column(name = "request_moderation", nullable = false)
-    private boolean requestModeration = true;
+    private boolean isRequestModeration = true;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)

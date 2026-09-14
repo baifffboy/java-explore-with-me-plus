@@ -31,18 +31,18 @@ public class PublicEventController {
     public List<EventShortDto> getEvents(
             @RequestParam(required = false) String text,
             @RequestParam(required = false) List<Long> categories,
-            @RequestParam(required = false) Boolean paid,
+            @RequestParam(name = "paid", required = false) Boolean isPaid,
             @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeStart,
             @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeEnd,
-            @RequestParam(defaultValue = "false") boolean onlyAvailable,
+            @RequestParam(name = "onlyAvailable", defaultValue = "false") boolean isOnlyAvailable,
             @RequestParam(required = false) EventSort sort,
             @RequestParam(defaultValue = "0") @PositiveOrZero int from,
             @RequestParam(defaultValue = "10") @Positive int size,
             HttpServletRequest httpRequest) {
-        log.info("Публичный поиск событий: from={}, size={}, onlyAvailable={}", from, size, onlyAvailable);
+        log.info("Публичный поиск событий: from={}, size={}, onlyAvailable={}", from, size, isOnlyAvailable);
         saveHit(httpRequest);
-        return eventService.getPublicEvents(text, categories, paid, rangeStart, rangeEnd,
-                onlyAvailable, sort, from, size);
+        return eventService.getPublicEvents(text, categories, isPaid, rangeStart, rangeEnd,
+                isOnlyAvailable, sort, from, size);
     }
 
     @GetMapping("/{id}")
