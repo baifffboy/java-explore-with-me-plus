@@ -1,7 +1,7 @@
 package ru.practicum.ewm.service.impl;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
@@ -27,7 +27,6 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-@RequiredArgsConstructor
 public class EventServiceImpl implements EventService {
     private final EventRepository eventRepository;
     private final UserRepository userRepository;
@@ -35,14 +34,30 @@ public class EventServiceImpl implements EventService {
     private final EventMapper eventMapper;
     private final RequestRepository requestRepository;
     private final StatsClient statsClient;
+    private final int minStartDelayHours;
+
+    public EventServiceImpl(
+            EventRepository eventRepository,
+            UserRepository userRepository,
+            CategoryRepository categoryRepository,
+            EventMapper eventMapper,
+            RequestRepository requestRepository,
+            StatsClient statsClient,
+            @Value("${ewm.events.min-start-delay-hours}") int minStartDelayHours) {
+        this.eventRepository = eventRepository;
+        this.userRepository = userRepository;
+        this.categoryRepository = categoryRepository;
+        this.eventMapper = eventMapper;
+        this.requestRepository = requestRepository;
+        this.statsClient = statsClient;
+        this.minStartDelayHours = minStartDelayHours;
+    }
 
     @Override
     public EventFullDto createEvent(Long userId, NewEventDto dto) {
         log.info("Создание события пользователем с id={}", userId);
         LocalDateTime now = LocalDateTime.now();
-        if (dto.getEventDate().isBefore(now.plusHours(2))) {
-            throw new ConflictException("Дата события должна быть не раньше чем через два часа от текущего момента");
-        }
+        validateEventDate(dto.getEventDate());
 
         User initiator = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователь с id=" + userId + " не найден"));
@@ -78,7 +93,6 @@ public class EventServiceImpl implements EventService {
     @Transactional(readOnly = true)
     public EventFullDto getUserEvent(Long userId, Long eventId) {
         log.info("Получение события с id={} пользователя с id={}", eventId, userId);
-        requireUser(userId);
         Event event = requireOwnedEvent(userId, eventId);
         long confirmed = requestRepository.countByEventIdAndStatus(eventId, RequestStatus.CONFIRMED);
         long views = views(List.of(event)).getOrDefault(eventUri(eventId), 0L);
@@ -89,12 +103,11 @@ public class EventServiceImpl implements EventService {
     @Transactional
     public EventFullDto updateUserEvent(Long userId, Long eventId, UpdateEventUserRequest request) {
         log.info("Изменение события с id={} пользователем с id={}", eventId, userId);
-        requireUser(userId);
         Event event = requireOwnedEvent(userId, eventId);
         if (event.getState() != EventState.PENDING && event.getState() != EventState.CANCELED) {
             throw new ConflictException("Изменить можно только отменённое событие или событие в ожидании модерации");
         }
-        validateEventDate(request.getEventDate(), 2);
+        validateEventDate(request.getEventDate());
         eventMapper.updateFromUserRequest(request, event);
         updateCategory(event, request.getCategory());
         if (request.getStateAction() == UserEventStateAction.SEND_TO_REVIEW) {
@@ -107,9 +120,10 @@ public class EventServiceImpl implements EventService {
         return eventMapper.toFullDto(event, confirmed, views);
     }
 
-    private User requireUser(Long userId) {
-        return userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException("Пользователь с id=" + userId + " не найден"));
+    private void requireUser(Long userId) {
+        if (!userRepository.existsById(userId)) {
+            throw new NotFoundException("Пользователь с id=" + userId + " не найден");
+        }
     }
 
     private Event requireOwnedEvent(Long userId, Long eventId) {
@@ -121,9 +135,12 @@ public class EventServiceImpl implements EventService {
         return event;
     }
 
-    private void validateEventDate(LocalDateTime date, int hours) {
-        if (date != null && date.isBefore(LocalDateTime.now().plusHours(hours))) {
-            throw new ConflictException("Дата события должна быть не раньше чем через " + hours + " часа от текущего момента");
+    private void validateEventDate(LocalDateTime date) {
+        if (date != null && date.isBefore(LocalDateTime.now().plusHours(minStartDelayHours))) {
+            throw new ConflictException(
+                    "Дата события должна быть не раньше чем через "
+                            + minStartDelayHours + " ч. от текущего момента"
+            );
         }
     }
 
@@ -193,19 +210,19 @@ public class EventServiceImpl implements EventService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<EventShortDto> getPublicEvents(String text, List<Long> categories, Boolean paid,
+    public List<EventShortDto> getPublicEvents(String text, List<Long> categories, Boolean isPaid,
                                                LocalDateTime rangeStart, LocalDateTime rangeEnd,
-                                               boolean onlyAvailable, EventSort sort, int from, int size) {
-        log.info("Публичный поиск событий: from={}, size={}, onlyAvailable={}", from, size, onlyAvailable);
+                                               boolean isOnlyAvailable, EventSort sort, int from, int size) {
+        log.info("Публичный поиск событий: from={}, size={}, onlyAvailable={}", from, size, isOnlyAvailable);
         LocalDateTime effectiveStart = rangeStart == null ? LocalDateTime.now() : rangeStart;
         validateRange(effectiveStart, rangeEnd);
         Specification<Event> specification = filters(null, List.of(EventState.PUBLISHED), categories,
-                text, paid, effectiveStart, rangeEnd);
-        List<Event> events = eventRepository.findAll(specification, Sort.by("eventDate"));
+                text, isPaid, effectiveStart, rangeEnd);
+        List<Event> events = eventRepository.findAll(specification, Sort.by(EventSort.EVENT_DATE.getProperty()));
         Map<Long, Long> counts = confirmedCounts(events);
         Map<String, Long> views = views(events);
         List<EventShortDto> result = events.stream()
-                .filter(event -> !onlyAvailable || event.getParticipantLimit() == 0 ||
+                .filter(event -> !isOnlyAvailable || event.getParticipantLimit() == 0 ||
                         counts.getOrDefault(event.getId(), 0L) < event.getParticipantLimit())
                 .map(event -> eventMapper.toShortDto(event, counts.getOrDefault(event.getId(), 0L),
                         views.getOrDefault(eventUri(event.getId()), 0L)))
@@ -238,14 +255,14 @@ public class EventServiceImpl implements EventService {
     }
 
     private Specification<Event> filters(List<Long> users, List<EventState> states, List<Long> categories,
-                                         String text, Boolean paid, LocalDateTime start, LocalDateTime end) {
+                                         String text, Boolean isPaid, LocalDateTime start, LocalDateTime end) {
         return (root, query, builder) -> {
             List<jakarta.persistence.criteria.Predicate> predicates = new java.util.ArrayList<>();
             if (users != null && !users.isEmpty()) predicates.add(root.get("initiator").get("id").in(users));
             if (states != null && !states.isEmpty()) predicates.add(root.get("state").in(states));
             if (categories != null && !categories.isEmpty())
                 predicates.add(root.get("category").get("id").in(categories));
-            if (paid != null) predicates.add(builder.equal(root.get("paid"), paid));
+            if (isPaid != null) predicates.add(builder.equal(root.get("isPaid"), isPaid));
             if (text != null && !text.isBlank()) {
                 String pattern = "%" + text.toLowerCase() + "%";
                 predicates.add(builder.or(builder.like(builder.lower(root.get("annotation")), pattern),
