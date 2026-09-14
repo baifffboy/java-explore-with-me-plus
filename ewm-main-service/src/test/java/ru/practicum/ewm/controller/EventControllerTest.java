@@ -12,7 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.validation.beanvalidation.MethodValidationInterceptor;
 import ru.practicum.ewm.EndpointHitRequestDto;
-import ru.practicum.ewm.client.StatsClient;
+import ru.practicum.ewm.StatsClient;
 import ru.practicum.ewm.controller.admin.AdminEventController;
 import ru.practicum.ewm.controller.priv.PrivateEventController;
 import ru.practicum.ewm.controller.publ.PublicEventController;
