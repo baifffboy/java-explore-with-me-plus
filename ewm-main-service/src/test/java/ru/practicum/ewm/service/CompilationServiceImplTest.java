@@ -159,7 +159,7 @@ class CompilationServiceImplTest {
     void shouldGetPinnedCompilations() {
         List<Compilation> compilations = List.of(compilation);
 
-        when(compilationRepository.findAllByPinned(eq(true), any(PageRequest.class))).thenReturn(compilations);
+        when(compilationRepository.findAllByIsPinned(eq(true), any(PageRequest.class))).thenReturn(compilations);
         when(compilationMapper.toDto(any(Compilation.class))).thenReturn(compilationDto);
 
         List<CompilationDto> result = compilationService.getCompilations(true, 0, 10);

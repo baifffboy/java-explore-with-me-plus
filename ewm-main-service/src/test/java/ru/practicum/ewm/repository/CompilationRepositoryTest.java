@@ -5,11 +5,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.test.context.ActiveProfiles;
 import ru.practicum.ewm.model.Compilation;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
+@ActiveProfiles("test")
 class CompilationRepositoryTest {
 
     @Autowired
@@ -61,8 +63,8 @@ class CompilationRepositoryTest {
         }
 
         Pageable pageable = PageRequest.of(0, 10);
-        var isPinned = compilationRepository.findAllByPinned(true, pageable);
-        var notPinned = compilationRepository.findAllByPinned(false, pageable);
+        var isPinned = compilationRepository.findAllByIsPinned(true, pageable);
+        var notPinned = compilationRepository.findAllByIsPinned(false, pageable);
 
         assertThat(isPinned).hasSize(3);
         assertThat(notPinned).hasSize(2);

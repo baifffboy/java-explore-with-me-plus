@@ -97,7 +97,7 @@ public class CompilationServiceImpl implements CompilationService {
         Pageable pageable = PageRequest.of(from / size, size);
         List<Compilation> compilations;
         if (isPinned != null) {
-            compilations = compilationRepository.findAllByPinned(isPinned, pageable);
+            compilations = compilationRepository.findAllByIsPinned(isPinned, pageable);
         } else {
             compilations = compilationRepository.findAll(pageable).getContent();
         }
