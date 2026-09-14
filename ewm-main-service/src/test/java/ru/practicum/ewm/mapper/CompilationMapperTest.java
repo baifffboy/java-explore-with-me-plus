@@ -20,7 +20,7 @@ class CompilationMapperTest {
         Compilation compilation = new Compilation();
         compilation.setId(1L);
         compilation.setTitle("Test Compilation");
-        compilation.setPinned(true);
+        compilation.setIsPinned(true);
         compilation.setEvents(new HashSet<>());
 
         CompilationDto dto = mapper.toDto(compilation);
@@ -28,7 +28,7 @@ class CompilationMapperTest {
         assertThat(dto).isNotNull();
         assertThat(dto.getId()).isEqualTo(1L);
         assertThat(dto.getTitle()).isEqualTo("Test Compilation");
-        assertThat(dto.getPinned()).isTrue();
+        assertThat(dto.getIsPinned()).isTrue();
         assertThat(dto.getEvents()).isEmpty();
     }
 
@@ -44,7 +44,7 @@ class CompilationMapperTest {
         assertThat(compilation).isNotNull();
         assertThat(compilation.getId()).isNull();
         assertThat(compilation.getTitle()).isEqualTo("Test Compilation");
-        assertThat(compilation.getPinned()).isTrue();
+        assertThat(compilation.getIsPinned()).isTrue();
     }
 
     @Test
@@ -52,17 +52,17 @@ class CompilationMapperTest {
         Compilation compilation = new Compilation();
         compilation.setId(1L);
         compilation.setTitle("Old Title");
-        compilation.setPinned(false);
+        compilation.setIsPinned(false);
 
         UpdateCompilationRequest request = new UpdateCompilationRequest();
         request.setTitle("New Title");
-        request.setPinned(true);
+        request.setIsPinned(true);
 
         mapper.updateCompilation(compilation, request);
 
         assertThat(compilation.getId()).isEqualTo(1L);
         assertThat(compilation.getTitle()).isEqualTo("New Title");
-        assertThat(compilation.getPinned()).isTrue();
+        assertThat(compilation.getIsPinned()).isTrue();
     }
 
     @Test

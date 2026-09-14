@@ -54,7 +54,7 @@ class CompilationServiceImplTest {
         compilationDto = new CompilationDto();
         compilationDto.setId(1L);
         compilationDto.setTitle("Test Compilation");
-        compilationDto.setPinned(true);
+        compilationDto.setIsPinned(true);
 
         newCompilationDto = NewCompilationDto.builder()
                 .title("Test Compilation")
@@ -112,7 +112,7 @@ class CompilationServiceImplTest {
     void shouldUpdateCompilation() {
         UpdateCompilationRequest request = new UpdateCompilationRequest();
         request.setTitle("Updated Compilation");
-        request.setPinned(false);
+        request.setIsPinned(false);
 
         when(compilationRepository.findById(1L)).thenReturn(Optional.of(compilation));
         when(compilationRepository.existsByTitle("Updated Compilation")).thenReturn(false);

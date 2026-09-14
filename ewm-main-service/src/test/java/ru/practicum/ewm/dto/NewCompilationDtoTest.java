@@ -59,6 +59,6 @@ class NewCompilationDtoTest {
                 .title("Test")
                 .build();
 
-        assertThat(dto.getPinned()).isFalse();
+        assertThat(dto.getIsPinned()).isFalse();
     }
 }

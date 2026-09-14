@@ -24,7 +24,7 @@ class UpdateCompilationRequestTest {
     void shouldValidateValidUpdateCompilationRequest() {
         UpdateCompilationRequest dto = new UpdateCompilationRequest();
         dto.setTitle("Updated Compilation");
-        dto.setPinned(true);
+        dto.setIsPinned(true);
 
         Set<ConstraintViolation<UpdateCompilationRequest>> violations = validator.validate(dto);
         assertThat(violations).isEmpty();
