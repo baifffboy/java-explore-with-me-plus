@@ -1,5 +1,6 @@
 package ru.practicum.ewm.dto.compilation;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import jakarta.validation.constraints.NotBlank;
@@ -19,6 +20,7 @@ public class NewCompilationDto {
 
     @Builder.Default
     @JsonSetter(nulls = Nulls.SKIP)
+    @JsonProperty("pinned")
     private Boolean isPinned = false;
 
     @NotBlank

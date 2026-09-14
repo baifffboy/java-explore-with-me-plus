@@ -1,5 +1,6 @@
 package ru.practicum.ewm.dto.compilation;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,6 +14,7 @@ import java.util.Set;
 public class CompilationDto {
     private Long id;
     private Set<EventShortDto> events;
+    @JsonProperty("pinned")
     private Boolean isPinned;
     private String title;
 }
