@@ -20,6 +20,3 @@ target/
 *.iws
 *.iml
 *.ipr
-
-### сделанный сервис статистики не трогаем
-ewm-stats-service/
