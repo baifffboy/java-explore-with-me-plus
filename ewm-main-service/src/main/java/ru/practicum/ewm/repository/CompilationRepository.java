@@ -15,7 +15,7 @@ public interface CompilationRepository extends JpaRepository<Compilation, Long> 
 
     boolean existsByTitle(@NotBlank @Size(min = 1, max = 50) String title);
 
-    List<Compilation> findAllByPinned(Boolean pinned, Pageable pageable);
+    List<Compilation> findAllByPinned(Boolean isPinned, Pageable pageable);
 
     @Query("SELECT c FROM Compilation AS c LEFT JOIN FETCH c.events WHERE c.id = :id")
     Optional<Compilation> findByIdWithEvents(@Param("id") Long compId);

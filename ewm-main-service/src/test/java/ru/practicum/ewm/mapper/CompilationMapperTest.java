@@ -36,7 +36,7 @@ class CompilationMapperTest {
     void shouldMapToCompilation() {
         NewCompilationDto dto = NewCompilationDto.builder()
                 .title("Test Compilation")
-                .pinned(true)
+                .isPinned(true)
                 .build();
 
         Compilation compilation = mapper.toCompilation(dto);

@@ -1,4 +1,5 @@
 package ru.practicum.ewm.dto.event;
+
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

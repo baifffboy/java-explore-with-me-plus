@@ -19,7 +19,7 @@ class CompilationRepositoryTest {
     void shouldSaveAndFindCompilation() {
         Compilation compilation = Compilation.builder()
                 .title("Test Compilation")
-                .pinned(true)
+                .isPinned(true)
                 .build();
 
         Compilation saved = compilationRepository.save(compilation);
@@ -27,14 +27,14 @@ class CompilationRepositoryTest {
 
         assertThat(found).isNotNull();
         assertThat(found.getTitle()).isEqualTo("Test Compilation");
-        assertThat(found.getPinned()).isTrue();
+        assertThat(found.getIsPinned()).isTrue();
     }
 
     @Test
     void shouldCheckExistsByTitle() {
         Compilation compilation = Compilation.builder()
                 .title("Unique Compilation")
-                .pinned(false)
+                .isPinned(false)
                 .build();
         compilationRepository.save(compilation);
 
@@ -46,25 +46,25 @@ class CompilationRepositoryTest {
     void shouldFindAllByPinned() {
         for (int i = 0; i < 3; i++) {
             Compilation compilation = Compilation.builder()
-                    .title("Pinned " + i)
-                    .pinned(true)
+                    .title("isPinned " + i)
+                    .isPinned(true)
                     .build();
             compilationRepository.save(compilation);
         }
 
         for (int i = 0; i < 2; i++) {
             Compilation compilation = Compilation.builder()
-                    .title("Not Pinned " + i)
-                    .pinned(false)
+                    .title("Not isPinned " + i)
+                    .isPinned(false)
                     .build();
             compilationRepository.save(compilation);
         }
 
         Pageable pageable = PageRequest.of(0, 10);
-        var pinned = compilationRepository.findAllByPinned(true, pageable);
+        var isPinned = compilationRepository.findAllByPinned(true, pageable);
         var notPinned = compilationRepository.findAllByPinned(false, pageable);
 
-        assertThat(pinned).hasSize(3);
+        assertThat(isPinned).hasSize(3);
         assertThat(notPinned).hasSize(2);
     }
 }

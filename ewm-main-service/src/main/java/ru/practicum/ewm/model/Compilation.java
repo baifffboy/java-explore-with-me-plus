@@ -32,7 +32,7 @@ public class Compilation {
     private Set<Event> events = new HashSet<>();
 
     @Column(nullable = false)
-    private Boolean pinned = false;
+    private Boolean isPinned = false;
 
     @Column(nullable = false, length = 256)
     private String title;

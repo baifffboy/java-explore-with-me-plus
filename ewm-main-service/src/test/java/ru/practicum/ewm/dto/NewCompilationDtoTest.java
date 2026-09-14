@@ -24,7 +24,7 @@ class NewCompilationDtoTest {
     void shouldValidateValidNewCompilationDto() {
         NewCompilationDto dto = NewCompilationDto.builder()
                 .title("Test Compilation")
-                .pinned(true)
+                .isPinned(true)
                 .build();
 
         Set<ConstraintViolation<NewCompilationDto>> violations = validator.validate(dto);

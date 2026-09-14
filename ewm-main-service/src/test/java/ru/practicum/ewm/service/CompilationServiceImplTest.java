@@ -48,7 +48,7 @@ class CompilationServiceImplTest {
         compilation = Compilation.builder()
                 .id(1L)
                 .title("Test Compilation")
-                .pinned(true)
+                .isPinned(true)
                 .build();
 
         compilationDto = new CompilationDto();
@@ -58,7 +58,7 @@ class CompilationServiceImplTest {
 
         newCompilationDto = NewCompilationDto.builder()
                 .title("Test Compilation")
-                .pinned(true)
+                .isPinned(true)
                 .build();
     }
 

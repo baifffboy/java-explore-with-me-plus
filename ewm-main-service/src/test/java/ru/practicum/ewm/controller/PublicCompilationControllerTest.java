@@ -46,17 +46,17 @@ class PublicCompilationControllerTest {
     void shouldGetPinnedCompilations() throws Exception {
         CompilationDto dto = new CompilationDto();
         dto.setId(1L);
-        dto.setTitle("Pinned Compilation");
-        dto.setPinned(true);
+        dto.setTitle("isPinned Compilation");
+        dto.setIsPinned(true);
 
         when(compilationService.getCompilations(true, 0, 10)).thenReturn(List.of(dto));
 
         mockMvc.perform(get("/compilations")
-                        .param("pinned", "true")
+                        .param("isPinned", "true")
                         .param("from", "0")
                         .param("size", "10"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].pinned").value(true));
+                .andExpect(jsonPath("$[0].isPinned").value(true));
     }
 
     @Test

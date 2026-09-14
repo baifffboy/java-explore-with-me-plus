@@ -35,7 +35,7 @@ class AdminCompilationControllerTest {
     void shouldCreateCompilation() throws Exception {
         NewCompilationDto newDto = NewCompilationDto.builder()
                 .title("Test Compilation")
-                .pinned(true)
+                .isPinned(true)
                 .build();
 
         CompilationDto resultDto = new CompilationDto();

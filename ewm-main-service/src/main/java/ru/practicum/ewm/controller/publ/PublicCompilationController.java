@@ -23,13 +23,13 @@ public class PublicCompilationController {
 
     @GetMapping
     public ResponseEntity<List<CompilationDto>> getCompilations(
-            @RequestParam(required = false) Boolean pinned,
+            @RequestParam(required = false) Boolean isPinned,
             @RequestParam(defaultValue = "0") @PositiveOrZero Integer from,
             @RequestParam(defaultValue = "10") @Positive Integer size
     ) {
-        log.info("Получение подборок событий с параметрами: pinned={}, from={}, size={}", pinned, from, size);
+        log.info("Получение подборок событий с параметрами: isPinned={}, from={}, size={}", isPinned, from, size);
         return ResponseEntity
-                .ok(compilationService.getCompilations(pinned, from, size));
+                .ok(compilationService.getCompilations(isPinned, from, size));
     }
 
     @GetMapping("/{compId}")

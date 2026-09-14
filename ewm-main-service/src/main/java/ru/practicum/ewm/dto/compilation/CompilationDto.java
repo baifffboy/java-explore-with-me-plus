@@ -13,6 +13,6 @@ import java.util.Set;
 public class CompilationDto {
     private Long id;
     private Set<EventShortDto> events;
-    private Boolean pinned;
+    private Boolean isPinned;
     private String title;
 }

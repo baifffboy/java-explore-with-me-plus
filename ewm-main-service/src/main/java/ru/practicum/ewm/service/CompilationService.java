@@ -17,7 +17,7 @@ public interface CompilationService {
 
     CompilationDto update(Long compId, @Valid UpdateCompilationRequest updateRequest);
 
-    List<CompilationDto> getCompilations(Boolean pinned, @PositiveOrZero Integer from, @Positive Integer size);
+    List<CompilationDto> getCompilations(Boolean isPinned, @PositiveOrZero Integer from, @Positive Integer size);
 
     CompilationDto getCompilation(@Positive Long compId);
 }

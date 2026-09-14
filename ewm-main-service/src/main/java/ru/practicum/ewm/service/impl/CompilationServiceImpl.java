@@ -41,8 +41,8 @@ public class CompilationServiceImpl implements CompilationService {
             throw new ConflictException(String.format("Подборка с названием %s уже существует", newCompilationDto.getTitle()));
         }
         Compilation compilation = compilationMapper.toCompilation(newCompilationDto);
-        if (compilation.getPinned() == null) {
-            compilation.setPinned(false);
+        if (compilation.getIsPinned() == null) {
+            compilation.setIsPinned(false);
         }
         Set<Event> eventEntities = new HashSet<>();
         if (newCompilationDto.getEvents() != null) {
@@ -92,12 +92,12 @@ public class CompilationServiceImpl implements CompilationService {
     }
 
     @Override
-    public List<CompilationDto> getCompilations(Boolean pinned, Integer from, Integer size) {
-        log.info("Получение подборок: pinned={}, from={}, size={}", pinned, from, size);
+    public List<CompilationDto> getCompilations(Boolean isPinned, Integer from, Integer size) {
+        log.info("Получение подборок: isPinned={}, from={}, size={}", isPinned, from, size);
         Pageable pageable = PageRequest.of(from / size, size);
         List<Compilation> compilations;
-        if (pinned != null) {
-            compilations = compilationRepository.findAllByPinned(pinned, pageable);
+        if (isPinned != null) {
+            compilations = compilationRepository.findAllByPinned(isPinned, pageable);
         } else {
             compilations = compilationRepository.findAll(pageable).getContent();
         }

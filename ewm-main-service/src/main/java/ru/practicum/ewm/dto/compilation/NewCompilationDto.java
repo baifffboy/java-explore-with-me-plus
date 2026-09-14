@@ -19,7 +19,7 @@ public class NewCompilationDto {
 
     @Builder.Default
     @JsonSetter(nulls = Nulls.SKIP)
-    private Boolean pinned = false;
+    private Boolean isPinned = false;
 
     @NotBlank
     @Size(min = 1, max = 50)
