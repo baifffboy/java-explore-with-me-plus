@@ -56,7 +56,7 @@ class PublicCompilationControllerTest {
                         .param("from", "0")
                         .param("size", "10"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].isPinned").value(true));
+                .andExpect(jsonPath("$[0].pinned").value(true));
     }
 
     @Test
