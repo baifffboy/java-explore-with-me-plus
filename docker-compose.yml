@@ -1,5 +1,3 @@
-version: '1.0'
-
 services:
   stats-server:
     build:
