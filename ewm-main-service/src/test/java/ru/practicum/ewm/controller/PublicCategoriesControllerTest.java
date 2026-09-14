@@ -15,7 +15,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(ru.practicum.ewm.controller.publics.PublicCategoriesController.class)
+@WebMvcTest(ru.practicum.ewm.controller.publ.PublicCategoriesController.class)
 class PublicCategoriesControllerTest {
 
     @Autowired

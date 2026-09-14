@@ -30,7 +30,7 @@ class PublicCompilationControllerTest {
         CompilationDto dto = new CompilationDto();
         dto.setId(1L);
         dto.setTitle("Test Compilation");
-        dto.setPinned(true);
+        dto.setIsPinned(true);
 
         when(compilationService.getCompilations(null, 0, 10)).thenReturn(List.of(dto));
 

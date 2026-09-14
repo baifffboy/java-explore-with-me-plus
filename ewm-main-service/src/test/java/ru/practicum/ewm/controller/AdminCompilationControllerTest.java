@@ -41,7 +41,7 @@ class AdminCompilationControllerTest {
         CompilationDto resultDto = new CompilationDto();
         resultDto.setId(1L);
         resultDto.setTitle("Test Compilation");
-        resultDto.setPinned(true);
+        resultDto.setIsPinned(true);
 
         when(compilationService.create(any(NewCompilationDto.class))).thenReturn(resultDto);
 
