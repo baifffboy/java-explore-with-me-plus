@@ -16,16 +16,12 @@ public interface EventMapper {
     @Mapping(target = "state", ignore = true)
     Event toEvent(NewEventDto dto);
 
-    @Mapping(target = "confirmedRequests", source = "confirmedRequests")
-    @Mapping(target = "views", source = "views")
     EventShortDto toShortDto(
             Event event,
             long confirmedRequests,
             long views
     );
 
-    @Mapping(target = "confirmedRequests", source = "confirmedRequests")
-    @Mapping(target = "views", source = "views")
     EventFullDto toFullDto(
             Event event,
             long confirmedRequests,

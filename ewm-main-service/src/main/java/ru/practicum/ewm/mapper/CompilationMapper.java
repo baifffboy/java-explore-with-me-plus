@@ -16,7 +16,6 @@ import ru.practicum.ewm.model.Compilation;
 )
 public interface CompilationMapper {
 
-    @Mapping(target = "events", source = "events")
     CompilationDto toDto(Compilation compilation);
 
     @Mapping(target = "id", ignore = true)
