@@ -6,7 +6,6 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -17,10 +16,7 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "comments", indexes = {
-        @Index(name = "idx_comments_event_created", columnList = "event_id,created_on,id"),
-        @Index(name = "idx_comments_author_id", columnList = "author_id")
-})
+@Table(name = "comments")
 @Getter
 @Setter
 @NoArgsConstructor
