@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.ewm.dto.comment.CommentDto;
 import ru.practicum.ewm.dto.comment.NewCommentDto;
 import ru.practicum.ewm.dto.comment.UpdateCommentRequest;
+import ru.practicum.ewm.service.CommentService;
 
 import java.util.List;
 
@@ -72,5 +73,4 @@ public class PrivateCommentController {
 
         commentService.deleteComment(userId, eventId, commentId);
     }
-}
 }
