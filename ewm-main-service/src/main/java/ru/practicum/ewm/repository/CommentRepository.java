@@ -18,18 +18,19 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
             FROM Comment c
             JOIN FETCH c.author
             JOIN FETCH c.event
-            WHERE c.event.id = :eventId
+            WHERE c.event.id = :eventId AND c.author.id = :userId
             ORDER BY c.createdOn DESC, c.id DESC
             """)
-    Page<Comment> findAllByEventId(@Param("eventId") Long eventId, Pageable pageable);
+    Page<Comment> findByEventIdAndUserId(@Param("eventId") Long eventId,
+                                         @Param("userId") Long userId,
+                                         Pageable pageable);
 
     @Query("""
             SELECT c
             FROM Comment c
             JOIN FETCH c.author
-            JOIN FETCH c.event
-            WHERE c.id = :commentId AND c.event.id = :eventId
+            WHERE c.id = :commentId AND c.author.id = :userId
             """)
-    Optional<Comment> findByIdAndEventId(@Param("commentId") Long commentId,
-                                         @Param("eventId") Long eventId);
+    Optional<Comment> findByCommentIdAndUserId(@Param("commentId") Long commentId,
+                                               @Param("userId") Long userId);
 }

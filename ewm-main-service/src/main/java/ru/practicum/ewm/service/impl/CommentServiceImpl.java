@@ -66,21 +66,21 @@ public class CommentServiceImpl implements CommentService {
         requireEvent(eventId);
 
         Pageable pageable = PageRequest.of(from / size, size);
-        List<Comment> comments = commentRepository.findAllByEventId(eventId, pageable).getContent();
+        List<Comment> comments = commentRepository.findByEventIdAndUserId(eventId, userId, pageable).getContent();
 
         return commentMapper.toDtoList(comments);
     }
 
     @Override
     public CommentDto getCommentById(Long userId, Long eventId, Long commentId) {
-        log.info("Получение комментария id={} события id={} пользователем id={}", commentId, eventId, userId);
+        log.info("Получение комментария id={} пользователем id={}", commentId, userId);
 
         requireUser(userId);
         requireEvent(eventId);
 
-        Comment comment = commentRepository.findByIdAndEventId(commentId, eventId)
+        Comment comment = commentRepository.findByCommentIdAndUserId(commentId, userId)
                 .orElseThrow(() -> new NotFoundException(
-                        String.format("Комментарий с id=%d для события id=%d не найден", commentId, eventId)
+                        String.format("Комментарий с id=%d не найден", commentId)
                 ));
 
         return commentMapper.toDto(comment);
@@ -95,7 +95,7 @@ public class CommentServiceImpl implements CommentService {
         requireUser(userId);
         requireEvent(eventId);
 
-        Comment comment = commentRepository.findByIdAndEventId(commentId, eventId)
+        Comment comment = commentRepository.findByCommentIdAndUserId(commentId, userId)
                 .orElseThrow(() -> new NotFoundException(
                         String.format("Комментарий с id=%d для события id=%d не найден", commentId, eventId)
                 ));
@@ -121,7 +121,7 @@ public class CommentServiceImpl implements CommentService {
         requireUser(userId);
         requireEvent(eventId);
 
-        Comment comment = commentRepository.findByIdAndEventId(commentId, eventId)
+        Comment comment = commentRepository.findByCommentIdAndUserId(commentId, userId)
                 .orElseThrow(() -> new NotFoundException(
                         String.format("Комментарий с id=%d для события id=%d не найден", commentId, eventId)
                 ));
