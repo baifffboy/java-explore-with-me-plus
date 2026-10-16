@@ -11,6 +11,13 @@ import java.time.LocalDateTime;
         @Index(name = "idx_events_category_id", columnList = "category_id"),
         @Index(name = "idx_events_state_event_date", columnList = "state,event_date")
 })
+@NamedEntityGraph(
+        name = "Event.withInitiatorAndCategory",
+        attributeNodes = {
+                @NamedAttributeNode("initiator"),
+                @NamedAttributeNode("category")
+        }
+)
 @Getter
 @Setter
 @Builder

@@ -15,18 +15,18 @@ import java.util.Optional;
 
 public interface EventRepository extends JpaRepository<Event, Long>, JpaSpecificationExecutor<Event> {
     @Override
-    @EntityGraph(attributePaths = {"initiator", "category"})
+    @EntityGraph(value = "Event.withInitiatorAndCategory")
     Optional<Event> findById(Long id);
 
-    @EntityGraph(attributePaths = {"initiator", "category"})
+    @EntityGraph(value = "Event.withInitiatorAndCategory")
     List<Event> findAllByInitiatorIdOrderByIdAsc(Long initiatorId, Pageable pageable);
 
     @Override
-    @EntityGraph(attributePaths = {"initiator", "category"})
+    @EntityGraph(value = "Event.withInitiatorAndCategory")
     Page<Event> findAll(@Nullable Specification<Event> spec, Pageable pageable);
 
     @Override
-    @EntityGraph(attributePaths = {"initiator", "category"})
+    @EntityGraph(value = "Event.withInitiatorAndCategory")
     List<Event> findAll(@Nullable Specification<Event> spec, Sort sort);
 
     boolean existsByCategoryId(Long categoryId);
